@@ -1,6 +1,6 @@
 import { useSession, signIn, signOut } from "next-auth/react"
 
-export default function Saves(props) {
+export default function Settings(props) {
     
     const { data: session, status } = useSession()
 
