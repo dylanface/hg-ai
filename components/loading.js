@@ -5,7 +5,6 @@ export default function Loading() {
 
     return (
         <CenteredContainer>
-
             <div>Loading...</div>
         </CenteredContainer>
     )
