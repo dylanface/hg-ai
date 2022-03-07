@@ -6,6 +6,7 @@ import { MongoDBAdapter } from "@next-auth/mongodb-adapter"
 import clientPromise from '/database/init'
 
 export default NextAuth({
+  secret: process.env.SECRET,
   // Configure one or more authentication providers
   providers: [
     GoogleProvider({
