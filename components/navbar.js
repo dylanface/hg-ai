@@ -8,8 +8,8 @@ import { useSession, signIn, signOut } from "next-auth/react"
 const defaultNav = [
     { name: 'Dashboard', href: '/', current: true },
     { name: 'Saved Games', href: '/saves', current: false },
-    { name: 'API Stats', href: '/stats', current: false },
     { name: 'Feedback', href: '/feedback', current: false },
+    { name: 'About', href: '/about', current: false },
 ]
 
 function classNames(...classes) {
@@ -25,10 +25,10 @@ export default function HGNavabar() {
       current: router.asPath === nav.href,
     }))
 
-    const user = session?.user;
+    const user = session?.user || undefined;
 
   return (
-    <Disclosure as="nav" className="bg-gray-800">
+    <Disclosure as="nav" className="bg-slate-700">
       {({ open }) => (
         <>
           <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
@@ -147,7 +147,7 @@ function UserIconDropDown({ user }) {
           <Menu.Item>
             {({ active }) => (
               <a
-                href="#"
+                href="/settings"
                 className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
               >
                 Settings

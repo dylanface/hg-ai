@@ -1,11 +1,12 @@
 import Image from "next/image";
 import { useSession, signIn, signOut } from "next-auth/react"
+import Loading from "../components/loading";
 
 export default function Index(props) {
   const { data: session, status } = useSession()
 
     if (status === "loading") {
-        return <div>Loading...</div>
+        return <Loading />
     }
 
   return (
@@ -31,7 +32,6 @@ export default function Index(props) {
         <div>
           {/* Hero card */}
           <div className="relative">
-            {/* <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gray-100" /> */}
             <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
               <div className="relative shadow-xl sm:rounded-2xl sm:overflow-hidden top-4">
                 <div className="absolute inset-0">
@@ -45,10 +45,10 @@ export default function Index(props) {
                 </div>
                 <div className="relative px-4 py-16 sm:px-6 sm:py-24 lg:py-32 lg:px-8">
                   <h1 className="text-center text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
-                    <span className="block text-white">Simulate a truly unique</span>
-                    <span className="block text-indigo-300">Hunger Games</span>
+                    <span className="block text-slate-200">Simulate a truly unique</span>
+                    <span className="block text-slate-500">Hunger Games</span>
                   </h1>
-                  <p className="mt-6 max-w-lg mx-auto text-center text-xl shadow-sm text-indigo-300 sm:max-w-3xl">
+                  <p className="mt-6 max-w-lg mx-auto text-center text-xl shadow-sm text-slate-200 sm:max-w-3xl">
                     Welcome to the demo of Hunger Games AI, this tool allows you to customise and simulate Hunger Games with players of your choosing.
                   </p>
                   <div className="mt-10 max-w-sm mx-auto sm:max-w-none sm:flex sm:justify-center">
@@ -56,13 +56,13 @@ export default function Index(props) {
                       <a
                         href="#"
                         onClick={() => signIn()}
-                        className="flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-indigo-700 bg-white hover:bg-indigo-50 sm:px-8"
+                        className="flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-slate-500 hover:bg-slate-400 sm:px-8"
                       >
                         Sign In
                       </a>
                       <a
                         href="#"
-                        className="flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-500 hover:bg-indigo-400 sm:px-8"
+                        className="flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-slate-500 hover:bg-slate-400 sm:px-8"
                       >
                         More Info
                       </a>
@@ -97,8 +97,6 @@ export default function Index(props) {
               </div>
             </div>
         </div>
-
-        {/* More main page content here... */}
       </main>
         )}
       </>

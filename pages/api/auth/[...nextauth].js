@@ -6,7 +6,6 @@ import { MongoDBAdapter } from "@next-auth/mongodb-adapter"
 import clientPromise from '/database/init'
 
 export default NextAuth({
-  // Configure one or more authentication providers
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_ID,
@@ -33,41 +32,41 @@ export default NextAuth({
 
         const trans = await transactions.find({ userId: user.id }).toArray()
 
+        session.user.id = user.id;
         session.user.transactions = trans;
       })
 
+      // Parse the provided user's full name into first and last name fields that exist within the session only
+      const parse = user.name.split(" ");
+      session.user.parsedName = {
+        first: parse[0],
+        last: parse[parse.length - 1]
+      };
+
       return session
-    },
-    async signIn({ user, account, profile, email, credentials }) {
-      if (email?.verificationRequest) return true;
-
-      const hasLetters = /[A-z]/;
-      const match = user.id.search(hasLetters);
-
-      if (match === -1) {
-        return true
-      }
-
+    }
+  },
+  adapter: MongoDBAdapter(clientPromise),
+  events: {
+    async signIn({ user, account, profile, isNewUser }) {
       const userAccountId = user.id;
-      let result;
+      const actionText = isNewUser ? "Account Creation" : "Sign In";
       
-      await clientPromise.then(async (client) => {
+      // Create a transaction for the user
+      clientPromise.then(async (client) => {
         const db = client.db()
         const transactions = db.collection("transactions")
 
-        result = await transactions.insertOne({
+        transactions.insertOne({
           userId: userAccountId,
           data: {
-            action: 'Sign In'
+            action: actionText,
           },
           createdAt: new Date()
         })
 
-      })
+      });
 
-
-      return true;
-    }
-  },
-  adapter: MongoDBAdapter(clientPromise)
+    },
+  }
 })

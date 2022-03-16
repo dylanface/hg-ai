@@ -10,7 +10,7 @@ export default function MyApp({ Component, pageProps: { session, ...pageProps } 
     <SessionProvider session={session}>
       <HGNavabar {...pageProps} />
       <Component {...pageProps} />
-      <style jsx global>{`body {background: #334155}`}</style>
+      <style jsx global>{`body {background: #0F172A}`}</style>
     </SessionProvider>
   )
 }
