@@ -11,7 +11,7 @@ export default function Stats() {
     }
 
     return session ? (
-        <div className="space-y-6 sm:px-6 lg:px-0 lg:col-span-9">
+        <>
             {session.user.transactions.length < 1 ? (
                 <NewUserAlert />
             ) : (
@@ -36,7 +36,7 @@ export default function Stats() {
                     </th>
                     <th
                         scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden xl:table-cell"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden 2xl:table-cell"
                     >
                         Transaction ID
                     </th>
@@ -48,7 +48,7 @@ export default function Stats() {
                     </th>
                     <th
                         scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden xl:table-cell"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell"
                     >
                         Date
                     </th>
@@ -66,7 +66,7 @@ export default function Stats() {
                             <img className="h-10 w-10 rounded-full" src={session?.user.image} alt="" />
                             </div>
                             <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">{session?.user.name}</div>
+                            <div className="text-sm font-medium text-gray-900">{session?.user.parsedName ? `${session.user.parsedName.first} ${session.user.parsedName.last}` : session?.user.name}</div>
                             <div className="text-sm text-gray-500 hidden md:block">{session?.user.email}</div>
                             </div>
                         </div>
@@ -74,7 +74,7 @@ export default function Stats() {
                         <td className="px-6 py-4 whitespace-nowrap hidden xl:table-cell">
                         <div className="text-sm text-gray-900">{statSet.data.action}</div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap hidden xl:table-cell">
+                        <td className="px-6 py-4 whitespace-nowrap hidden 2xl:table-cell">
                         <div className="text-sm text-gray-500">{statSet._id}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -82,7 +82,7 @@ export default function Stats() {
                             Success
                         </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden xl:table-cell">{new Date(statSet.createdAt).toLocaleString()}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden md:table-cell">{new Date(statSet.createdAt).toLocaleString()}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <a href="#" className="text-indigo-600 hover:text-indigo-900">
                             View
@@ -94,7 +94,7 @@ export default function Stats() {
                 </table>
             </div>
             </div>
-        </div>
+        </>
     ) : (
         <>
         <NoAuth />

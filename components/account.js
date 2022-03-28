@@ -13,7 +13,7 @@ export default function Account({ session }) {
 
         <>
         <section aria-labelledby="account-heading">
-                <form action="#" method="POST">
+                <form action="/api/v1/name-change" method="POST">
                   <div className="shadow sm:rounded-md sm:overflow-hidden">
                     <div className="bg-white py-6 px-4 sm:p-6">
                       <div>

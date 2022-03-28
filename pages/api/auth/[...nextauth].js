@@ -37,11 +37,15 @@ export default NextAuth({
       })
 
       // Parse the provided user's full name into first and last name fields that exist within the session only
-      const parse = user.name.split(" ");
-      session.user.parsedName = {
-        first: parse[0],
-        last: parse[parse.length - 1]
-      };
+      if (user.name && !user.prefName) {
+        const parse = user.name.split(" ");
+        session.user.parsedName = {
+          first: parse[0],
+          last: parse[parse.length - 1] || undefined
+        };
+      } else if (user.prefName) {
+        session.user.parsedName = user.prefName;
+      }
 
       return session
     }

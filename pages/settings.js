@@ -64,23 +64,23 @@ export default function Settings(props) {
               <nav className="space-y-1">
                 {subNavigation.map((item) => (
                     item.value === selectedPage ? item.current = true : item.current = false,
-                  <a
+                    <a
                     key={item.name}
                     href={item.href}
                     onClick={() => setSelectedPage(item.value)}
                     className={classNames(
                       item.current
-                        ? 'bg-gray-50 text-slate-600 hover:bg-white'
-                        : 'text-slate-300 hover:text-gray-600 hover:bg-gray-50',
+                      ? 'bg-gray-50 text-slate-600 hover:bg-white'
+                      : 'text-slate-300 hover:text-gray-600 hover:bg-gray-50',
                       'group rounded-md px-3 py-2 flex items-center text-sm font-medium'
-                    )}
-                    aria-current={item.current ? 'page' : undefined}
-                  >
+                      )}
+                      aria-current={item.current ? 'page' : undefined}
+                      >
                     <item.icon
                       className={classNames(
                         item.current ? 'text-slate-500' : 'text-gray-400 group-hover:text-gray-500',
                         'flex-shrink-0 -ml-1 mr-3 h-6 w-6'
-                      )}
+                        )}
                       aria-hidden="true"
                     />
                     <span className="truncate">{item.name}</span>

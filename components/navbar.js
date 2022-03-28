@@ -1,6 +1,6 @@
 import { Fragment, useState } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
+import { BellIcon, MenuIcon, XIcon, PlusSmIcon } from '@heroicons/react/outline'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useSession, signIn, signOut } from "next-auth/react"
@@ -10,6 +10,12 @@ const defaultNav = [
     { name: 'Saved Games', href: '/saves', current: false },
     { name: 'Feedback', href: '/feedback', current: false },
     { name: 'About', href: '/about', current: false },
+]
+
+const profileNav = [
+    { name: 'API Stats', href: '/settings?page=stats' },
+    { name: 'Settings', href: '/settings' },
+    { true: { name: 'Sign out', href: '#', onClick: () => signOut() }, false: { name: 'Sign in', href: '#', onClick: () => signIn() } },
 ]
 
 function classNames(...classes) {
@@ -32,8 +38,10 @@ export default function HGNavabar() {
       {({ open }) => (
         <>
           <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-            <div className="relative flex items-center justify-between h-16">
-              <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
+            <div className="flex justify-between h-16">
+              <div className="flex">
+
+              <div className="-ml-2 mr-2 flex items-center md:hidden">
                 {/* Mobile menu button*/}
                 <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                   <span className="sr-only">Open main menu</span>
@@ -44,7 +52,7 @@ export default function HGNavabar() {
                   )}
                 </Disclosure.Button>
               </div>
-              <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
+
                 <div className="flex-shrink-0 flex items-center">
                   <div className='block lg:hidden h-8 w-auto'>
                   <Image
@@ -59,8 +67,8 @@ export default function HGNavabar() {
                     />
                     </div>
                 </div>
-                <div className="hidden sm:block sm:ml-6">
-                  <div className="flex space-x-4">
+
+                <div className="hidden md:ml-6 md:flex md:items-center md:space-x-4">
                     {navigation.map((item) => (
                       <a
                         key={item.name}
@@ -74,27 +82,39 @@ export default function HGNavabar() {
                         {item.name}
                       </a>
                     ))}
-                  </div>
+                </div>
+
+              </div>
+              
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <button
+                    type="button"
+                    className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-500 hover:bg-indigo-600 hover:outline-none hover:ring-2 hover:ring-indigo-500"
+                  >
+                    <PlusSmIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                    <span>New Simulation</span>
+                  </button>
+                </div>
+                <div className="hidden md:ml-4 md:flex-shrink-0 md:flex md:items-center">
+                  <button
+                    type="button"
+                    className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white hover:outline-none hover:ring-2 hover:ring-white"
+                  >
+                    <span className="sr-only">View notifications</span>
+                    <BellIcon className="h-6 w-6" aria-hidden="true" />
+                  </button>
+
+                  {/* Profile dropdown */}
+                  <UserIconDropDown user={user} />
                 </div>
               </div>
-              <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                <button
-                  type="button"
-                  className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white hover:outline-none hover:ring-2 hover:ring-white"
-                >
-                  <span className="sr-only">View notifications</span>
-                  <BellIcon className="h-6 w-6" aria-hidden="true" />
-                </button>
-
-                {/* Profile dropdown */}
-                <UserIconDropDown user={user} />
                 
               </div>
             </div>
-          </div>
 
           {/* Mobile menu, show/hide with tailwind. */}
-          <MobileNav navigation={navigation} />
+          <MobileNav navigation={navigation} user={user} />
           
         </>
       )}
@@ -134,48 +154,49 @@ function UserIconDropDown({ user }) {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
-          <Menu.Item>
-            {({ active }) => (
-              <a
-                href="#"
-                className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-              >
-                Your Profile
-              </a>
-            )}
-          </Menu.Item>
-          <Menu.Item>
-            {({ active }) => (
-              <a
-                href="/settings"
-                className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-              >
-                Settings
-              </a>
-            )}
-          </Menu.Item>
-          <Menu.Item>
-            {({ active }) => (
-                <div as='a'>
-                {user ? (<a
-                    href="#"
-                    onClick={() => signOut()}
+          {profileNav.map((item) => {
+            if (item.true) {
+              return user ? (
+                <Menu.Item key={item.true.name}>
+                {({ active }) => (
+                  <a
+                    href={item.true.href}
                     className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                    >
-                    Sign out
-                  </a>) : (
-                      <a
-                      href="#"
-                      onClick={() => signIn()}
-                      className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                      >
-                    Sign in
+                    onClick={item.true.onClick}
+                  >
+                    {item.true.name}
                   </a>
                 )}
-                </div>
-              
-            )}
-          </Menu.Item>
+                </Menu.Item>
+              ) : (
+                <Menu.Item key={item.false.name}>
+                {({ active }) => (
+                  <a
+                    href={item.false.href}
+                    className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                    onClick={item.false.onClick}
+                  >
+                    {item.false.name}
+                  </a>
+                )}
+                </Menu.Item>
+              )
+            } else {
+              return (
+                <Menu.Item key={item.name}>
+                {({ active }) => (
+                  <a
+                    href={item.href}
+                    className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                  >
+                    {item.name}
+                  </a>
+                )}
+                </Menu.Item>
+              )
+            }
+          })}
+  
         </Menu.Items>
       </Transition>
     </Menu>
@@ -183,10 +204,10 @@ function UserIconDropDown({ user }) {
 
 }
 
-function MobileNav({ navigation }) {
+function MobileNav({ navigation, user }) {
   
   return (
-    <Disclosure.Panel className="sm:hidden">
+    <Disclosure.Panel className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navigation.map((item) => (
                 <Disclosure.Button
@@ -197,12 +218,76 @@ function MobileNav({ navigation }) {
                   item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                   'block px-3 py-2 rounded-md text-base font-medium'
                   )}
-                  aria-current={item.current ? 'page' : undefined}
+                aria-current={item.current ? 'page' : undefined}
                 >
                   {item.name}
                 </Disclosure.Button>
               ))}
             </div>
+
+            <div className="pt-4 pb-3 border-t border-gray-700">
+
+              <div className="flex items-center px-5 sm:px-6">
+
+                <div className="flex-shrink-0">
+                  <img className="h-10 w-10 rounded-full" src={user?.image ? user.image : "https://media.istockphoto.com/vectors/male-face-silhouette-or-icon-man-avatar-profile-unknown-or-anonymous-vector-id1087531642?k=20&m=1087531642&s=612x612&w=0&h=D6OBNUY7ZxQTAHNVtL9mm2wbHb_dP6ogIsCCWCqiYQg="} alt="" />
+                </div>
+
+                <div className="ml-3">
+                  <div className="text-base font-medium text-white">{user?.name ? user.name : "Game Master"}</div>
+                  <div className="text-sm font-medium text-gray-400">{user?.email ? user.email : "Not Logged In or Unathorized"}</div>
+                </div>
+
+                <button
+                  type="button"
+                  className="ml-auto flex-shrink-0 bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                >
+                  <span className="sr-only">View notifications</span>
+                  <BellIcon className="h-6 w-6" aria-hidden="true" />
+                </button>
+
+              </div>
+
+              <div className="mt-3 px-2 space-y-1 sm:px-3">
+                {profileNav.map((item) => {
+                  if (item.true) {
+                    return user ? (
+                    <Disclosure.Button
+                    key={item.true.name}
+                    as={Fragment}
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
+                    >
+                      <a onClick={item.true.onClick} href={item.true.href}>
+                      {item.true.name}
+                      </a>
+                    </Disclosure.Button>
+                    ) : (
+                    <Disclosure.Button
+                    key={item.false.name}
+                    as={Fragment}
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
+                    >
+                      <a onClick={item.false.onClick} href={item.false.href}>
+                      {item.false.name}
+                      </a>
+                    </Disclosure.Button>
+                    )
+                  } else {
+                    return (
+                    <Disclosure.Button
+                    key={item.name}
+                    as="a"
+                    href={item.href}
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
+                    >
+                    {item.name}
+                    </Disclosure.Button>
+                    )
+                  }
+                })}
+              </div>
+              </div>
+
           </Disclosure.Panel>
   )
 }
